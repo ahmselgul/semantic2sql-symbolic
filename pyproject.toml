@@ -1,0 +1,54 @@
+[project]
+name = "semantic2sql-symbolic"
+version = "0.1.0"
+description = "A tool for converting semantic queries to SQL using SymbolicAI"
+authors = [
+    {name = "ahmetgulmez", email = "ahmselgul@hotmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "python-dotenv>=1.1.0,<2.0.0",
+    "openai>=1.0.0",
+    "jupyter>=1.0.0",
+    "numpy>=1.26.4,<2.0.0",
+    "torch==2.2.2"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "semantic2sql-symbolic"
+version = "0.1.0"
+description = "Natural language to SQL query generator using SymbolicAI"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+openai = "^1.0.0"
+jupyter = "^1.0.0"
+python-dotenv = "^1.1.0"
+symbolicai = {git = "https://github.com/ExtensityAI/symbolicai.git", rev = "dev"}
+numpy = ">=1.26.4,<2.0.0"
+torch = "==2.2.2"
+torchvision = "==0.17.2"
+torchaudio = "==2.2.2"
+transformers = "^4.52.4"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.2.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+mypy = "^1.16.0"
+pytest = "^8.4.0"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
