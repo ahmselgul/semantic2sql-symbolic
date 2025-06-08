@@ -14,5 +14,5 @@ __all__ = [
     "SQLOutput", 
     "BasicSQLGenerator", 
     "SQLInterface",
-    "SQLGeneratorService"
+    "SQLGeneratorService",
 ] 

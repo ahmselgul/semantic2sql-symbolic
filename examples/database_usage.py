@@ -10,7 +10,12 @@ To use this example:
 """
 
 import sys
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 # Add project root to Python path
 project_root = Path(__file__).parent.parent
@@ -18,8 +23,8 @@ sys.path.insert(0, str(project_root))
 
 from semantic2sql import SQLInterface, SQLGeneratorService
 
-# Configure your database path here
-DATABASE_PATH = "/Users/apple/Downloads/northwind.db"  # Change this to your database file path
+# Get database path from environment or use default
+DATABASE_PATH = os.getenv("DATABASE_PATH", "northwind.db")
 
 
 def main():
@@ -32,9 +37,10 @@ def main():
         print("To get the Northwind database:")
         print("   1. Download from: https://raw.githubusercontent.com/jpwhite3/northwind-SQLite3/main/dist/northwind.db")
         print("   2. Save it to your project directory")
-        print("   3. Update DATABASE_PATH in this script if needed")
+        print("   3. Set DATABASE_PATH environment variable or create .env file")
         print()
-        print("Or use your own SQLite database by changing DATABASE_PATH above!")
+        print("Example .env file:")
+        print("   DATABASE_PATH=northwind.db")
         return
     
     print("Exploring Northwind Database\n")
