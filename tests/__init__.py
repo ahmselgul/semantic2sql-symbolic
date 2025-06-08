@@ -1,1 +1,1 @@
-# Tests for semantic2sql 
+# Tests package 
