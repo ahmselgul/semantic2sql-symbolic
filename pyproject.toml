@@ -9,6 +9,8 @@ description = "Natural language to SQL query generator using SymbolicAI"
 authors = ["ahmetgulmez <ahmselgul@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [{include = "semantic2sql"}]
+
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"

@@ -1,16 +1,11 @@
-from symai import Symbol, Expression
-from symai.models import LLMDataModel
+"""
+SymbolicAI contracts for SQL generation
+"""
+
+from symai import Expression
 from symai.strategy import contract
-from pydantic import Field
 
-
-
-class QueryInput(LLMDataModel):
-    query: str = Field(description="Natural language query to convert to SQL")
-
-
-class SQLOutput(LLMDataModel):
-    sql: str = Field(description="Generated SQL query")
+from .models import QueryInput, SQLOutput
 
 
 @contract(
@@ -19,6 +14,8 @@ class SQLOutput(LLMDataModel):
     verbose=True
 )
 class BasicSQLGenerator(Expression):
+    """Basic SQL generator using SymbolicAI @contract"""
+    
     def __init__(self):
         super().__init__()
     
@@ -35,31 +32,16 @@ class BasicSQLGenerator(Expression):
     def post(self, result: SQLOutput) -> bool:
         """Post-condition: Check if SQL is valid"""
         sql = result.sql.strip().upper()
-        # Check basic SQL validity
         return sql.endswith(';')
     
     @property
     def prompt(self) -> str:
         return (
-            "You are an expert SQL generator. Convert natural language queries to valid SQL statements. "
+            "You are an expert SQL generator. Convert natural language queries to valid SQL statements using the provided table schema. "
             "Rules:\n"
             "1. Use standard SQL syntax\n" 
             "2. Always end with semicolon\n"
-            "3. Return only the SQL statement, no explanation\n"
-        )
-
-
-if __name__ == "__main__":
-    generator = BasicSQLGenerator()
-    
-    test_queries = [
-        "show me all active users",
-        "get the top 5 customers by order rating",
-    ]
-    
-    for query in test_queries:
-        print(f"\nQuery: '{query}'")
-        test_input = QueryInput(query=query)
-        result = generator(input=test_input)
-        print(f"SQL result:   {result.sql}")
-    
+            "3. Use actual table and column names from the provided table schema\n"
+            "4. If no table schema is provided, use generic table/column names\n"
+            "5. Return only the SQL statement, no explanation\n"
+        ) 
