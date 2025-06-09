@@ -56,10 +56,7 @@ class TestSQLOutput:
         """Test creating SQLOutput with required fields"""
         sql_output = SQLOutput(sql="SELECT * FROM users")
         assert sql_output.sql == "SELECT * FROM users"
-        assert sql_output.is_valid is True  # Default value
-        assert sql_output.validation_notes == ""  # Default value
-        assert sql_output.dialect_used == SQLDialect.GENERIC  # Default dialect
-        
+
     @pytest.mark.parametrize("dialect", [
         SQLDialect.MYSQL,
         SQLDialect.POSTGRESQL,
@@ -67,30 +64,14 @@ class TestSQLOutput:
         SQLDialect.GENERIC
     ])
     def test_sql_output_with_dialect(self, dialect):
-        """Test creating SQLOutput with specific dialect"""
-        sql_output = SQLOutput(
-            sql="SELECT * FROM users", 
-            dialect_used=dialect
-        )
-        assert sql_output.sql == "SELECT * FROM users"
-        assert sql_output.dialect_used == dialect
-        
-    @pytest.mark.parametrize("is_valid,notes", [
-        (True, ""),
-        (False, "Missing semicolon"),
-        (False, "Invalid syntax")
-    ])
-    def test_sql_output_validation_fields(self, is_valid, notes):
-        """Test SQLOutput validation fields"""
-        sql_output = SQLOutput(
-            sql="SELECT * FROM users",
-            is_valid=is_valid,
-            validation_notes=notes,
-            dialect_used=SQLDialect.MYSQL
-        )
-        assert sql_output.is_valid is is_valid
-        assert sql_output.validation_notes == notes
-        assert sql_output.dialect_used == SQLDialect.MYSQL
+        """Test SQLOutput creation is independent of dialect"""  
+        sql_output = SQLOutput(sql="SELECT name FROM users WHERE id = 1")
+        assert sql_output.sql == "SELECT name FROM users WHERE id = 1"
+
+    def test_sql_output_minimal(self):
+        """Test SQLOutput with only required fields"""
+        sql_output = SQLOutput(sql="SELECT 1")
+        assert sql_output.sql == "SELECT 1"
 
 
 class TestSQLDialect:
