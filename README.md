@@ -1,12 +1,13 @@
 # Semantic2SQL-Symbolic
 
-Natural language to SQL query generator using SymbolicAI contracts.
+Natural language to SQL query generator using SymbolicAI contracts with multi-dialect support.
 
 ## Features
 
 - Convert natural language to SQL using SymbolicAI `@contract` decorators
-- Automatic database schema discovery
-- Clean, composable architecture
+- Multi-dialect SQL support (MySQL, PostgreSQL, SQLite, Generic)
+- Enhanced prompts with dialect-specific syntax rules
+- Contract-based validation for reliable SQL generation
 
 ## Installation
 
@@ -32,53 +33,89 @@ cp env.example .env
 ## Quick Start
 
 ```python
-import os
-from dotenv import load_dotenv
-from semantic2sql import SQLInterface, SQLGeneratorService
+from semantic2sql.contracts import SemanticSQLGenerator
+from semantic2sql.models import QueryInput, SQLDialect
 
-# Load environment variables from .env file
-load_dotenv()
+# Initialize the generator
+generator = SemanticSQLGenerator()
 
-# Download sample database
-# curl -o northwind.db https://raw.githubusercontent.com/jpwhite3/northwind-SQLite3/main/dist/northwind.db
+# Define your table schema
+schema = """
+Table: customers
+Columns: id (INT), name (VARCHAR), country (VARCHAR), created_at (TIMESTAMP)
+"""
 
-sql_generator = SQLGeneratorService()
+# Generate SQL for different dialects
+input_data = QueryInput(
+    query="find customers from USA created in the last 30 days",
+    table_schema=schema,
+    sql_dialect=SQLDialect.MYSQL
+)
 
-# Get database path from environment or use default
-db_path = os.getenv("DATABASE_PATH", "northwind.db")
-with SQLInterface(db_path) as db:
-    # Auto-discover schema
-    schema = db.get_table_schema("Customers")
-    
-    # Generate SQL from natural language
-    sql = sql_generator.generate_sql("find customers from USA", schema)
-    
-    # Execute query
-    results = db.execute_query(sql)
-    print(f"Found {len(results)} customers")
+result = generator(input=input_data)
+print(f"Generated SQL: {result.sql}")
 ```
 
-## Components
+## Supported SQL Dialects
 
-- **`SQLInterface`**: Database operations with schema discovery
-- **`SQLGeneratorService`**: SQL generation from natural language  
-- **`BasicSQLGenerator`**: SymbolicAI contract for SQL generation
+- **MySQL**: `DATE_FORMAT()`, `AUTO_INCREMENT`, `INTERVAL` syntax
+- **PostgreSQL**: `to_char()`, `SERIAL`, `ILIKE`, `INTERVAL '30 days'`
+- **SQLite**: `strftime()`, `AUTOINCREMENT`, `datetime()` functions
+- **Generic**: Standard SQL compatible across databases
+
+## Architecture
+
+The system uses a clean, minimal architecture:
+
+- **`QueryInput`**: Input model with query, schema, and dialect
+- **`SQLOutput`**: Output model containing just the generated SQL
+- **`SemanticSQLGenerator`**: SymbolicAI contract with enhanced prompts and validation
 
 ## Example Queries
 
-Try these with the Northwind database:
+Try these with different dialects:
 
 ```python
-"find customers from Germany"
-"show products under 20 dollars" 
-"get orders from 1997"
-"find employees in London"
+# String functions (shows LIKE vs ILIKE differences)
+"find customers with names containing 'john'"
+
+# Date functions (shows dialect-specific date handling)
+"show orders from the last 30 days"
+
+# Auto-increment (shows different syntax)
+"create a users table with auto-increment ID"
+```
+
+## Examples
+
+Run the included examples:
+
+```bash
+# Basic usage with different dialects
+python examples/basic_usage.py
+
+# Database integration with Northwind database
+python examples/database_usage.py
+```
+
+For the database example, download the Northwind database:
+```bash
+curl -o northwind.db https://raw.githubusercontent.com/jpwhite3/northwind-SQLite3/main/dist/northwind.db
 ```
 
 ## Development
 
 ```bash
 poetry run pytest  # Run tests
+poetry run pytest tests/test_dialect_performance.py -v  # Test dialect differences
 ```
+
+## Testing
+
+The project includes comprehensive tests:
+
+- **Model tests**: Input/output validation
+- **Contract tests**: SQL generation functionality  
+- **Dialect performance tests**: Verify dialect-specific behavior
 
 Built with [SymbolicAI](https://github.com/ExtensityAI/symbolicai)
