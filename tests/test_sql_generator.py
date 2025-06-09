@@ -13,21 +13,25 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from semantic2sql import SQLGeneratorService, QueryInput, SQLOutput
 
 
+@pytest.fixture
+def sql_service():
+    """Fixture to provide SQL generator service instance"""
+    return SQLGeneratorService()
+
+
 class TestSQLGeneratorService:
     """Basic test cases for SQLGeneratorService"""
     
-    def test_service_initialization(self):
+    def test_service_initialization(self, sql_service):
         """Test that SQLGeneratorService can be initialized"""
-        service = SQLGeneratorService()
-        assert service is not None
-        assert hasattr(service, 'sql_generator')  # Actual attribute name
+        assert sql_service is not None
+        assert hasattr(sql_service, 'sql_generator')  # Actual attribute name
     
-    def test_generate_sql_for_table(self):
+    def test_generate_sql_for_table(self, sql_service):
         """Test SQL generation for specific table"""
-        service = SQLGeneratorService()
         # This test just checks the method exists and formats schema correctly
         try:
-            result = service.generate_sql_for_table("find users", "users", "id (INT), name (VARCHAR)")
+            result = sql_service.generate_sql_for_table("find users", "users", "id (INT), name (VARCHAR)")
             # Just check that some SQL-like output is returned
             assert isinstance(result, str)
             assert len(result) > 0
