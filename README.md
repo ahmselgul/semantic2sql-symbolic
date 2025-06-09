@@ -32,6 +32,8 @@ cp env.example .env
 
 ## Quick Start
 
+### Python API
+
 ```python
 from semantic2sql.contracts import SemanticSQLGenerator
 from semantic2sql.models import QueryInput, SQLDialect
@@ -54,6 +56,33 @@ input_data = QueryInput(
 
 result = generator(input=input_data)
 print(f"Generated SQL: {result.sql}")
+```
+
+### Web Demo API
+
+For easy testing and demonstration, run the FastAPI server:
+
+```bash
+poetry run python api.py
+```
+
+Then open http://localhost:8000 in your browser for an interactive demo where you can:
+
+- **Upload SQLite databases** - Drop any `.db` file to extract schema automatically
+- **Natural language queries** - Query databases with plain English
+- **Multi-dialect support** - Test MySQL, PostgreSQL, SQLite, and Generic SQL
+- **Live execution** - See both generated SQL and actual results
+
+**API Endpoints:**
+- `POST /generate-sql` - Generate SQL from natural language and schema
+- `POST /upload-db` - Upload a SQLite database file  
+- `POST /query-db/{db_id}` - Query an uploaded database with natural language
+
+**Example cURL:**
+```bash
+curl -X POST "http://localhost:8000/generate-sql" \
+     -H "Content-Type: application/json" \
+     -d '{"query": "find customers from USA", "sql_dialect": "mysql"}'
 ```
 
 ## Supported SQL Dialects
