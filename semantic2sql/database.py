@@ -167,7 +167,7 @@ class SQLInterface:
         """
         if not self.connection:
             raise RuntimeError("Database not connected")
-            
+        
         cursor = self.connection.cursor()
         cursor.execute(sql_query)
         

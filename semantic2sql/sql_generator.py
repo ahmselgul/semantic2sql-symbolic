@@ -3,7 +3,7 @@ SQL generation service using SymbolicAI contracts
 """
 
 from typing import Dict, Any
-from .contracts import BasicSQLGenerator
+from .contracts import SemanticSQLGenerator
 from .models import QueryInput
 
 
@@ -14,7 +14,7 @@ class SQLGeneratorService:
     
     def __init__(self):
         """Initialize the SQL generator"""
-        self.sql_generator = BasicSQLGenerator()
+        self.sql_generator = SemanticSQLGenerator()
         
     def generate_sql(self, natural_query: str, table_schema: str) -> str:
         """

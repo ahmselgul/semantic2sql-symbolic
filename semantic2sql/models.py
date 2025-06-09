@@ -17,4 +17,6 @@ class QueryInput(LLMDataModel):
 
 class SQLOutput(LLMDataModel):
     """Output model for generated SQL queries"""
-    sql: str = Field(description="Generated SQL query") 
+    sql: str = Field(description="Generated SQL query")
+    is_valid: bool = Field(description="Whether the generated SQL is syntactically correct", default=True)
+    validation_notes: str = Field(description="Any syntax validation notes or corrections", default="") 

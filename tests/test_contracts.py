@@ -1,5 +1,5 @@
 """
-Basic tests for SymbolicAI contracts for SQL generation
+Tests for SymbolicAI contracts for SQL generation
 """
 
 import sys
@@ -9,30 +9,31 @@ import pytest
 # Add project root to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from semantic2sql import QueryInput, SQLOutput, BasicSQLGenerator
+from semantic2sql import QueryInput, SQLOutput, SemanticSQLGenerator
 
 
-class TestBasicSQLGenerator:
-    """Basic test cases for BasicSQLGenerator contract"""
+class TestSemanticSQLGenerator:
+    """Test cases for SemanticSQLGenerator contract"""
     
     def test_contract_initialization(self):
         """Test that contract can be initialized"""
-        generator = BasicSQLGenerator()
+        generator = SemanticSQLGenerator()
         assert generator is not None
     
     def test_basic_sql_generation(self):
         """Test basic SQL generation without table schema"""
-        generator = BasicSQLGenerator()
+        generator = SemanticSQLGenerator()
         test_input = QueryInput(query="show me all active users")
         result = generator(input=test_input)
         
         assert isinstance(result, SQLOutput)
         assert result.sql
         assert "SELECT" in result.sql.upper()
+        assert result.is_valid is True
     
     def test_table_schema_generation(self):
         """Test SQL generation with table schema"""
-        generator = BasicSQLGenerator()
+        generator = SemanticSQLGenerator()
         
         client_table = """
         Table: clients
@@ -46,12 +47,14 @@ class TestBasicSQLGenerator:
         assert result.sql
         assert "SELECT" in result.sql.upper()
         assert "clients" in result.sql.lower()
+        assert result.is_valid is True
     
     def test_contract_input_validation(self):
-        """Test contract handles invalid input properly"""
-        generator = BasicSQLGenerator()
+        """Test contract handles input properly"""
+        generator = SemanticSQLGenerator()
         
         # Test with valid input
         test_input = QueryInput(query="find users")
         result = generator(input=test_input)
-        assert isinstance(result, SQLOutput) 
+        assert isinstance(result, SQLOutput)
+        assert result.is_valid is True 
