@@ -11,12 +11,19 @@ Natural language to SQL query generator using SymbolicAI contracts with multi-di
 
 ## Installation
 
-### Option 1: Using Poetry (Recommended)
-
+### Create a virtual environment
 
 ```bash
 git clone https://github.com/ahmselgul/semantic2sql-symbolic.git
 cd semantic2sql-symbolic
+python -m venv .venv  # Create virtual environment
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+```
+
+### Option 1: Using Poetry (Recommended)
+
+
+```bash
 poetry install  # Creates virtual environment automatically and installs dependencies
 ```
 
@@ -25,10 +32,6 @@ poetry install  # Creates virtual environment automatically and installs depende
 With pip, you need to manually create and activate a virtual environment.
 
 ```bash
-git clone https://github.com/ahmselgul/semantic2sql-symbolic.git
-cd semantic2sql-symbolic
-python -m venv .venv  # Create virtual environment
-source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
 pip install -r requirements.txt  # Install dependencies
 ```
 
@@ -40,7 +43,10 @@ After installation, SymbolicAI will automatically create a configuration file. Y
 ```bash
 poetry run python -c "from semantic2sql import SemanticSQLGenerator"
 ```
-
+or if no poetry installed
+```bash
+python -c "from semantic2sql import SemanticSQLGenerator"
+```
 2. **Configure your LLM API key in the config file:**
    - Edit `.venv/.symai/symai.config.json` (you can use nano: `nano .venv/.symai/symai.config.json`)
    - Set your `NEUROSYMBOLIC_ENGINE_API_KEY` with your LLM API key
