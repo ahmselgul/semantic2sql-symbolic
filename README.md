@@ -11,10 +11,25 @@ Natural language to SQL query generator using SymbolicAI contracts with multi-di
 
 ## Installation
 
+### Option 1: Using Poetry (Recommended)
+
+
 ```bash
 git clone https://github.com/ahmselgul/semantic2sql-symbolic.git
 cd semantic2sql-symbolic
-poetry install
+poetry install  # Creates virtual environment automatically and installs dependencies
+```
+
+### Option 2: Using pip
+
+With pip, you need to manually create and activate a virtual environment.
+
+```bash
+git clone https://github.com/ahmselgul/semantic2sql-symbolic.git
+cd semantic2sql-symbolic
+python -m venv .venv  # Create virtual environment
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+pip install -r requirements.txt  # Install dependencies
 ```
 
 ### SymbolicAI Configuration
