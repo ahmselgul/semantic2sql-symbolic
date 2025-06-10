@@ -17,14 +17,36 @@ cd semantic2sql-symbolic
 poetry install
 ```
 
-Configure environment variables:
+### SymbolicAI Configuration
+
+After installation, SymbolicAI will automatically create a configuration file. You need to configure your OpenAI API or other LLM-Engine key:
+
+1. **Run any import to generate the config file:**
 ```bash
-export NEUROSYMBOLIC_ENGINE_API_KEY="your-api-key"
-export NEUROSYMBOLIC_ENGINE_MODEL="gpt-4o-mini"
-export DATABASE_PATH="northwind.db"
+poetry run python -c "from semantic2sql import SemanticSQLGenerator"
 ```
 
-Or create a `.env` file:
+2. **Configure your LLM API key in the config file:**
+   - Edit `.venv/.symai/symai.config.json` (you can use nano: `nano .venv/.symai/symai.config.json`)
+   - Set your `NEUROSYMBOLIC_ENGINE_API_KEY` with your LLM API key
+   - Set `NEUROSYMBOLIC_ENGINE_MODEL` to `"gpt-4o-mini"` (or your preferred model)
+
+**Edit with nano:**
+```bash
+nano .venv/.symai/symai.config.json
+```
+
+**Example configuration:**
+```json
+{
+    "NEUROSYMBOLIC_ENGINE_API_KEY": "sk-your-actual-api-key-here",
+    "NEUROSYMBOLIC_ENGINE_MODEL": "gpt-4o-mini",
+    ...
+}
+```
+
+
+For database path create a `.env` file:
 ```bash
 # Copy example and customize
 cp env.example .env
